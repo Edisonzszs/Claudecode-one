@@ -66,5 +66,6 @@ export interface ComputerUseHostAdapter {
 }
 
 export interface ComputerExecutor {
-  capabilities: Record<string, boolean>
+  capabilities: Record<string, boolean | string>
+  listInstalledApps?(): Promise<string[]>
 }

@@ -259,7 +259,7 @@ async function animatedMove(
 export function createCliExecutor(opts: {
   getMouseAnimationEnabled: () => boolean
   getHideBeforeActionEnabled: () => boolean
-}): ComputerExecutor {
+}): ComputerExecutor & Record<string, unknown> {
   if (process.platform !== 'darwin') {
     throw new Error(
       `createCliExecutor called on ${process.platform}. Computer control is macOS-only.`,

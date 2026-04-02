@@ -63,7 +63,6 @@ export async function createComputerUseMcpServerForCli(): Promise<
   const adapter = getComputerUseHostAdapter()
   const coordinateMode = getChicagoCoordinateMode()
   const server = createComputerUseMcpServer(adapter, coordinateMode)
-
   const installedAppNames = await tryGetInstalledAppNames()
   const tools = buildComputerUseTools(
     adapter.executor.capabilities,
@@ -101,6 +100,6 @@ export async function runComputerUseMcpServer(): Promise<void> {
   process.stdin.on('error', () => void shutdownAndExit())
 
   logForDebugging('[Computer Use MCP] Starting MCP server')
-  await server.connect(transport)
+  await server!.connect(transport)
   logForDebugging('[Computer Use MCP] MCP server started')
 }

@@ -102,7 +102,7 @@ export const API_RESIZE_PARAMS = {
 // ---------------------------------------------------------------------------
 
 export class ComputerExecutor {
-  capabilities: Record<string, boolean> = {}
+  capabilities: Record<string, boolean | string> = {}
 }
 
 // ---------------------------------------------------------------------------
@@ -144,7 +144,7 @@ export function bindSessionContext(
  * Stub 返回空数组（无工具）。
  */
 export function buildComputerUseTools(
-  _capabilities?: Record<string, boolean>,
+  _capabilities?: Record<string, boolean | string>,
   _coordinateMode?: CoordinateMode,
   _installedAppNames?: string[],
 ): Array<{ name: string; description: string; inputSchema: Record<string, unknown> }> {
@@ -153,11 +153,17 @@ export function buildComputerUseTools(
 
 /**
  * 创建 Computer Use MCP server。
- * Stub 返回 null（服务未启用）。
+ * Stub 返回一个最小化的 server 对象。
  */
 export function createComputerUseMcpServer(
   _adapter?: ComputerUseHostAdapter,
   _coordinateMode?: CoordinateMode,
-): null {
-  return null
+): {
+  setRequestHandler: (_schema: unknown, _handler: () => Promise<unknown>) => void
+  connect: (_transport: unknown) => Promise<void>
+} {
+  return {
+    setRequestHandler: () => {},
+    connect: async () => {},
+  }
 }
