@@ -1,6 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import { formatBriefTimestamp } from "../formatBriefTimestamp";
 
+// Force English locale for deterministic tests
+process.env.LC_ALL = "en_US.UTF-8";
+
 describe("formatBriefTimestamp", () => {
   // Fixed "now" for deterministic tests: 2026-04-02T14:00:00Z (Thursday)
   const now = new Date("2026-04-02T14:00:00Z");

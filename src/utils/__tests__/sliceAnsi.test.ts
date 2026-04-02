@@ -4,6 +4,8 @@ import { mock, describe, expect, test } from "bun:test";
 mock.module("src/ink/stringWidth.js", () => ({
   stringWidth: (str: string) => {
     // Simplified width calculation for test purposes
+    // Note: This is a simplified implementation for testing sliceAnsi
+    // It correctly handles CJK characters (width 2) and most emoji (width 2)
     let width = 0;
     for (const char of str) {
       const code = char.codePointAt(0)!;
@@ -12,7 +14,10 @@ mock.module("src/ink/stringWidth.js", () => ({
         (code >= 0x4e00 && code <= 0x9fff) || // CJK
         (code >= 0x3000 && code <= 0x303f) || // CJK Symbols
         (code >= 0xff01 && code <= 0xff60) || // Fullwidth Forms
-        (code >= 0xf900 && code <= 0xfaff)    // CJK Compatibility
+        (code >= 0xf900 && code <= 0xfaff) || // CJK Compatibility
+        // Emoji ranges (width 2)
+        (code >= 0x1f300 && code <= 0x1faff) || // Various emoji
+        (code >= 0x2600 && code <= 0x27bf)      // Misc symbols
       ) {
         width += 2;
       } else if (code > 0) {

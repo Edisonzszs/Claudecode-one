@@ -4,7 +4,7 @@ import { describe, expect, test } from "bun:test";
 // main.tsx has heavy bootstrap dependencies; we test the CLI argument parsing
 // patterns it uses to ensure correct behavior.
 
-const { Command } = require("/Users/konghayao/code/ai/claude-code/node_modules/.old_modules-13e6b62a502cda34/commander/index.js");
+const { Command } = require("commander");
 
 function createTestProgram(): Command {
   const program = new Command();

@@ -2,6 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { stripHtmlComments, isMemoryFilePath, getLargeMemoryFiles } from "../../src/utils/claudemd";
 import { buildEffectiveSystemPrompt } from "../../src/utils/systemPrompt";
 import { createTempDir, cleanupTempDir, writeTempFile } from "../mocks/file-system";
+import { sep } from "path";
 
 // ─── CLAUDE.md Integration with System Prompt ─────────────────────────
 
@@ -78,7 +79,8 @@ describe("Context build: CLAUDE.md file system integration", () => {
   test("isMemoryFilePath correctly identifies CLAUDE.md paths", () => {
     expect(isMemoryFilePath("/project/CLAUDE.md")).toBe(true);
     expect(isMemoryFilePath("/project/CLAUDE.local.md")).toBe(true);
-    expect(isMemoryFilePath("/project/.claude/rules/file.md")).toBe(true);
+    // Use platform-specific separator for .claude/rules path
+    expect(isMemoryFilePath(`/project${sep}.claude${sep}rules${sep}file.md`)).toBe(true);
     expect(isMemoryFilePath("/project/README.md")).toBe(false);
     expect(isMemoryFilePath("/project/src/index.ts")).toBe(false);
   });

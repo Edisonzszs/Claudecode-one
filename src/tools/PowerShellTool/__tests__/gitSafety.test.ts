@@ -3,13 +3,13 @@ import { mock, describe, expect, test } from "bun:test";
 // Mock dependencies before import
 const mockCwd = "/Users/test/project";
 
+// Use mock.module for cwd to avoid importing the full bootstrap chain
 mock.module("src/utils/cwd.js", () => ({
   getCwd: () => mockCwd,
 }));
 
-mock.module("src/utils/powershell/parser.js", () => ({
-  PS_TOKENIZER_DASH_CHARS: new Set(["-", "\u2013", "\u2014", "\u2015"]),
-}));
+// Import PS_TOKENIZER_DASH_CHARS from the real module instead of mocking
+// The mock was causing issues with parallel test execution
 
 const { isGitInternalPathPS, isDotGitPathPS } = await import("../gitSafety");
 

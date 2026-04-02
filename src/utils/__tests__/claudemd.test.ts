@@ -6,6 +6,7 @@ import {
   MAX_MEMORY_CHARACTER_COUNT,
   type MemoryFileInfo,
 } from "../claudemd";
+import { sep } from "path";
 
 function mockMemoryFile(overrides: Partial<MemoryFileInfo> = {}): MemoryFileInfo {
   return {
@@ -87,7 +88,9 @@ describe("isMemoryFilePath", () => {
   });
 
   test("returns true for .claude/rules/ path", () => {
-    expect(isMemoryFilePath("/project/.claude/rules/foo.md")).toBe(true);
+    // Use platform-specific separator for correct matching
+    const testPath = `/project${sep}.claude${sep}rules${sep}foo.md`;
+    expect(isMemoryFilePath(testPath)).toBe(true);
   });
 
   test("returns false for regular file", () => {
@@ -107,7 +110,8 @@ describe("isMemoryFilePath", () => {
   });
 
   test("returns false for non-.md file in .claude/rules/", () => {
-    expect(isMemoryFilePath(".claude/rules/foo.txt")).toBe(false);
+    const testPath = `.claude${sep}rules${sep}foo.txt`;
+    expect(isMemoryFilePath(testPath)).toBe(false);
   });
 });
 

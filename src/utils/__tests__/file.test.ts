@@ -68,12 +68,16 @@ describe("stripLineNumberPrefix", () => {
 describe("normalizePathForComparison", () => {
   test("normalizes redundant separators", () => {
     const result = normalizePathForComparison("/a//b/c");
-    expect(result).toBe("/a/b/c");
+    // On Windows, paths are normalized to backslashes and lowercase
+    const expected = process.platform === "win32" ? "\\a\\b\\c" : "/a/b/c";
+    expect(result).toBe(expected);
   });
 
   test("resolves dot segments", () => {
     const result = normalizePathForComparison("/a/./b/../c");
-    expect(result).toBe("/a/c");
+    // On Windows, paths are normalized to backslashes and lowercase
+    const expected = process.platform === "win32" ? "\\a\\c" : "/a/c";
+    expect(result).toBe(expected);
   });
 });
 
@@ -83,6 +87,7 @@ describe("pathsEqual", () => {
   });
 
   test("returns true for equivalent paths with dot segments", () => {
+    // On Windows, this compares case-insensitively
     expect(pathsEqual("/a/./b", "/a/b")).toBe(true);
   });
 

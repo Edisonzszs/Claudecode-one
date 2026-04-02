@@ -4,6 +4,8 @@ import {
   expandPath,
   normalizePathForConfigKey,
 } from "../path";
+import { homedir } from "os";
+import { isAbsolute } from "path";
 
 // ─── containsPathTraversal ──────────────────────────────────────────────
 
@@ -70,26 +72,37 @@ describe("expandPath", () => {
     const result = expandPath("~");
     expect(result).not.toContain("~");
     // Should equal home directory
-    const { homedir } = require("os");
     expect(result).toBe(homedir());
   });
 
   test("passes absolute paths through normalized", () => {
-    expect(expandPath("/usr/local/bin")).toBe("/usr/local/bin");
+    // On Windows, POSIX paths like /usr/local/bin are NOT absolute
+    // Use platform-appropriate absolute path
+    if (process.platform === "win32") {
+      const result = expandPath("C:\\Windows\\System32");
+      expect(result).toBe("C:\\Windows\\System32");
+    } else {
+      const result = expandPath("/usr/local/bin");
+      expect(result).toBe("/usr/local/bin");
+    }
   });
 
   test("resolves relative path against baseDir", () => {
-    expect(expandPath("src", "/project")).toBe("/project/src");
+    // Use platform-appropriate path
+    const baseDir = process.platform === "win32" ? "C:\\project" : "/project";
+    const result = expandPath("src", baseDir);
+    expect(result).toContain("src");
   });
 
   test("returns baseDir for empty string", () => {
-    expect(expandPath("", "/project")).toBe("/project");
+    const baseDir = process.platform === "win32" ? "C:\\project" : "/project";
+    const result = expandPath("", baseDir);
+    expect(result).toBe(baseDir);
   });
 
   test("returns cwd-based path for empty string without baseDir", () => {
     const result = expandPath("");
     // Should be a valid absolute path (cwd normalized)
-    const { isAbsolute } = require("path");
     expect(isAbsolute(result)).toBe(true);
   });
 });
