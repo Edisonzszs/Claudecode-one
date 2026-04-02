@@ -161,9 +161,11 @@ export function createComputerUseMcpServer(
 ): {
   setRequestHandler: (_schema: unknown, _handler: () => Promise<unknown>) => void
   connect: (_transport: unknown) => Promise<void>
+  close: () => Promise<void>
 } {
   return {
     setRequestHandler: () => {},
     connect: async () => {},
+    close: async () => {},
   }
 }
