@@ -32,3 +32,6 @@ npm-debug.log*
 
 # Bun
 bun.lock
+
+# Local docs (not for remote)
+PROJECT_STATUS.md
